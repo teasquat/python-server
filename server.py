@@ -8,6 +8,7 @@ PORT = 7788 # Arbitrary non-privileged port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 players = dict([])
+pets = dict([])
 
 try:
     s.bind((HOST, PORT))
@@ -23,6 +24,9 @@ print 'Socket now listening'
 def clientthread(conn):
     id=random.randint(0,100000)
     global players
+    global pets
+
+    conn.sendall(str(id))
 
     while True:
         #Receiving from client
@@ -32,16 +36,21 @@ def clientthread(conn):
             if action == "up":
                 print("up")
                 for k, v in players.iteritems():
-                    conn.sendall(v)
+                    conn.sendall("pl_" + str(k) + "_" + str(v))
+                for k, v in pets.iteritems():
+                    conn.sendall("pt_" + str(k) + "_" + str(v))
                 #update the dude
             elif action == "pl":
                 print("pl")
                 x,y,dx,dy = value.split(":")
                 assert(x and y and dx and dy)
-                players[id]=value
+                players[id] = value
                 #update his pos
             elif action == "pt":
                 print("pt")
+                x,y,dx,dy = value.split(":")
+                assert(x and y and dx and dy)
+                pets[id] = value
                 #update his pet
         else:
             break
