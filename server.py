@@ -31,8 +31,13 @@ def clientthread(conn):
     while True:
         #Receiving from client
         data = conn.recv(1024)
-        if data:
-            action, value = data.split("_")
+
+        if not data:
+            break
+
+        for part in iter(data.splitlines()):
+            print(part)
+            action, value = part.split("_")
             if action == "up":
                 print("up")
                 for k, v in players.iteritems():
@@ -52,8 +57,6 @@ def clientthread(conn):
                 assert(x and y and dx and dy)
                 pets[id] = value
                 #update his pet
-        else:
-            break
 
     del players[id]
     conn.close()
