@@ -36,10 +36,9 @@ def clientthread(conn):
             break
 
         for part in iter(data.splitlines()):
-            print(part)
+            if (part.count("_") != 1): break
             action, value = part.split("_")
             if action == "up":
-                print("up")
                 for k, v in players.iteritems():
                     conn.sendall("pl_" + str(k) + "_" + str(v) + "\n")
                 for k, v in pets.iteritems():
@@ -47,22 +46,21 @@ def clientthread(conn):
                 conn.sendall("done\n")
                 #update the dude
             elif action == "pl":
-                print("pl")
+                if (part.count(":") != 3): break
                 x,y,dx,dy = value.split(":")
                 assert(x and y and dx and dy)
                 players[player_id] = value
                 #update his pos
             elif action == "pt":
-                print("pt")
+                if (part.count(":") != 3): break
                 x,y,dx,dy = value.split(":")
                 assert(x and y and dx and dy)
                 pets[player_id] = value
                 #update his pet
             elif action == "id":
-                print("id")
                 player_id = value
 
-    del players[id]
+    del players[player_id]
     conn.close()
 
 while 1:
