@@ -22,11 +22,11 @@ s.listen(10)
 print 'Socket now listening'
 
 def clientthread(conn):
-    id=random.randint(0,100000)
+    player_id=random.randint(0,100000)
     global players
     global pets
 
-    conn.sendall(str(id))
+    conn.sendall(str(player_id))
 
     while True:
         #Receiving from client
@@ -41,22 +41,26 @@ def clientthread(conn):
             if action == "up":
                 print("up")
                 for k, v in players.iteritems():
-                    conn.sendall("pl_" + str(k) + "_" + str(v))
+                    conn.sendall("pl_" + str(k) + "_" + str(v) + "\n")
                 for k, v in pets.iteritems():
-                    conn.sendall("pt_" + str(k) + "_" + str(v))
+                    conn.sendall("pt_" + str(k) + "_" + str(v) + "\n")
+                conn.sendall("done\n")
                 #update the dude
             elif action == "pl":
                 print("pl")
                 x,y,dx,dy = value.split(":")
                 assert(x and y and dx and dy)
-                players[id] = value
+                players[player_id] = value
                 #update his pos
             elif action == "pt":
                 print("pt")
                 x,y,dx,dy = value.split(":")
                 assert(x and y and dx and dy)
-                pets[id] = value
+                pets[player_id] = value
                 #update his pet
+            elif action == "id":
+                print("id")
+                player_id = value
 
     del players[id]
     conn.close()
