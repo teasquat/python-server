@@ -61,8 +61,8 @@ def clientthread(conn):
                 players[player_id] = value
                 #update his pos
             elif action == "pt":
-                if (part.count(":") != 3): break
-                x,y,dx,dy = value.split(":")
+                if (part.count(":") != 4): break
+                x,y,dx,dy,pickup = value.split(":")
                 if (not (x and y and dx and dy)): break
                 pets[player_id] = value
                 #update his pet
