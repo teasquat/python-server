@@ -48,13 +48,13 @@ def clientthread(conn):
             elif action == "pl":
                 if (part.count(":") != 3): break
                 x,y,dx,dy = value.split(":")
-                assert(x and y and dx and dy)
+                if (not (x and y and dx and dy)): break
                 players[player_id] = value
                 #update his pos
             elif action == "pt":
                 if (part.count(":") != 3): break
                 x,y,dx,dy = value.split(":")
-                assert(x and y and dx and dy)
+                if (not (x and y and dx and dy)): break
                 pets[player_id] = value
                 #update his pet
             elif action == "id":
