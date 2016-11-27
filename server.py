@@ -26,16 +26,25 @@ def clientthread(conn):
     global players
     global pets
 
+    pet = 1
+    beard = 1
+    br = 1
+    bg = 1
+    bb = 1
+    tshirt = 1
+    tr = 1
+    tg = 1
+    tb = 1
+
     conn.sendall(str(player_id))
 
     while True:
         #Receiving from client
         data = conn.recv(1024)
-
-        if not data:
-            break
+        exit = False
 
         for part in iter(data.splitlines()):
+            if part == "close": exit = True; break
             if (part.count("_") != 1): break
             action, value = part.split("_")
             if action == "up":
@@ -59,8 +68,14 @@ def clientthread(conn):
                 #update his pet
             elif action == "id":
                 player_id = value
+            elif action == "sp":
+                if (part.count(":") != 8): break
+                pet, beard, br, bg, bb, tshirt, tr, tg, tb = value.split(":")
+
+        if exit: conn.sendall("kys"); break
 
     del players[player_id]
+    del pets[player_id]
     conn.close()
 
 while 1:
